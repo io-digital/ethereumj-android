@@ -1,7 +1,7 @@
 
 # ethereumj-android
 
-This project is an Android-friendly redistribution of [ether.camp's](http://ether.camp) ethereumj. It depends on [SpongyCastle](https://rtyley.github.io/spongycastle/) to provide a comprehensive security implementation suitable for generating and operating on Ethereum-compatible private keys.
+This library is an Android-friendly redistribution of [ether.camp's](http://ether.camp) ethereumj. It depends on [SpongyCastle](https://rtyley.github.io/spongycastle/) to provide a comprehensive security implementation suitable for generating and operating on Ethereum-compatible private keys.
 
 ## Usage
 
