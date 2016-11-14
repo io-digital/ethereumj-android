@@ -10,10 +10,8 @@ package your.package.id;
 
 import java.security.Security;
 import java.security.SecureRandom;
-
 import org.spongycastle.util.encoders.Hex;
 import org.spongycastle.jce.provider.BouncyCastleProvider;
-
 import za.co.io.ethereumj_android.crypto.ECKey;
 
 class YourClass {
