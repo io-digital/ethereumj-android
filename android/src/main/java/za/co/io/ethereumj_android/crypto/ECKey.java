@@ -161,6 +161,8 @@ public class ECKey implements Serializable {
     public ECKey(Provider provider, SecureRandom secureRandom) {
         this.provider = provider;
 
+
+
         final KeyPairGenerator keyPairGen = ECKeyPairGenerator.getInstance(provider, secureRandom);
         final KeyPair keyPair = keyPairGen.generateKeyPair();
 
