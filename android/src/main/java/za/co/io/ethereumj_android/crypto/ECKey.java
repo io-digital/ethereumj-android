@@ -16,6 +16,8 @@ package za.co.io.ethereumj_android.crypto;
  * limitations under the License.
  */
 
+import android.util.Log;
+
 import org.spongycastle.asn1.ASN1InputStream;
 import org.spongycastle.asn1.ASN1Integer;
 import org.spongycastle.asn1.DLSequence;
@@ -50,12 +52,17 @@ import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.UnrecoverableEntryException;
+import java.security.cert.CertificateException;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.InvalidKeySpecException;
@@ -167,9 +174,27 @@ public class ECKey implements Serializable {
         final KeyPair keyPair = keyPairGen.generateKeyPair();
 
         this.privKey = keyPair.getPrivate();
-//        this.pubKey = keyPair.getPublic();
-
         final PublicKey pubKey = keyPair.getPublic();
+        try {
+            KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
+            ks.load(null);
+            ks.setKeyEntry("etc", this.privKey, null, null);
+            ks.store(null);
+            PrivateKey pk = (PrivateKey) ks.getEntry("etc", null);
+            Log.v("ethereumj", (
+                    pk.getAlgorithm() + " " +
+                    new String(pk.getEncoded()) + " " +
+                    pk.getEncoded() + " " + pk.getFormat()
+            ));
+        } catch (
+            KeyStoreException |
+            IOException |
+            CertificateException |
+            UnrecoverableEntryException |
+            NoSuchAlgorithmException e
+        ) {
+            Log.v("ethereumj", e.getMessage());
+        }
 
         if (pubKey instanceof BCECPublicKey) {
             pub = ((BCECPublicKey) pubKey).getQ();
@@ -420,7 +445,7 @@ public class ECKey implements Serializable {
      * @return 20-byte address
      */
     public static byte[] computeAddress(byte[] pubBytes) {
-        return za.co.io.ethereumj_android.crypto.HashUtil.sha3omit12(
+        return HashUtil.sha3omit12(
             Arrays.copyOfRange(pubBytes, 1, pubBytes.length));
     }
 
